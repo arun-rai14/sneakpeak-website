@@ -115,11 +115,42 @@ const observer = new IntersectionObserver((entries) => {
 }, observerOptions);
 
 // Observe service cards and other elements
-document.querySelectorAll('.service-card, .about-content').forEach(el => {
+document.querySelectorAll('.service-card, .about-content, .feature-card').forEach(el => {
     el.style.opacity = '0';
     el.style.transform = 'translateY(30px)';
     el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
     observer.observe(el);
+});
+
+// Stats Counter Animation
+const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting && !entry.target.classList.contains('counted')) {
+            entry.target.classList.add('counted');
+            const statNumber = entry.target.querySelector('.stat-number');
+            const target = parseInt(statNumber.getAttribute('data-target'));
+            const suffix = statNumber.getAttribute('data-suffix') || '';
+            const duration = 2000;
+            const increment = target / (duration / 16);
+            let current = 0;
+            
+            const updateCounter = () => {
+                current += increment;
+                if (current < target) {
+                    statNumber.textContent = Math.floor(current) + suffix;
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    statNumber.textContent = target + suffix;
+                }
+            };
+            
+            updateCounter();
+        }
+    });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.stat-item').forEach(item => {
+    statsObserver.observe(item);
 });
 
 // Add parallax effect to hero section
