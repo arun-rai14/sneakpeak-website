@@ -379,9 +379,10 @@ section h2 {
 }
 
 .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
     text-align: center;
 }
 
